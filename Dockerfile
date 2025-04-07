@@ -1,12 +1,13 @@
 # syntax=docker/dockerfile:1.2
-FROM alpine:3.21
+FROM traefik:v2.10
 
-RUN apk add --no-cache --no-progress ca-certificates tzdata
+# Copy configuration files
+COPY traefik.yml /etc/traefik/traefik.yml
+COPY dynamic.yml /etc/traefik/dynamic.yml
 
-ARG TARGETPLATFORM
-COPY ./dist/$TARGETPLATFORM/traefik /
-
+# Expose ports
 EXPOSE 80
-VOLUME ["/tmp"]
+EXPOSE 8080
 
-ENTRYPOINT ["/traefik"]
+# Command to run Traefik
+CMD ["traefik"]
